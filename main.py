@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from datetime import date
 
 
-# Definição do modelo de dados usando Pydantic
 class Pessoa(BaseModel):
     nome_completo: str
     data_nascimento: date
