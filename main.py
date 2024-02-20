@@ -1,10 +1,14 @@
-from fastapi import FastAPI
-from typing import List
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from typing import List, Optional
 from datetime import date
+import uuid
+
+app = FastAPI()
 
 
 class Pessoa(BaseModel):
+    id: Optional[str] = None
     nome_completo: str
     data_nascimento: date
     endereco: str
@@ -12,51 +16,49 @@ class Pessoa(BaseModel):
     estado_civil: str
 
 
-app = FastAPI()
-
-# Lista para armazenar as pessoas cadastradas (nossa "base de dados" em memória)
-db_pessoas: List[Pessoa] = []
+# Simulando um banco de dados em memória
+db: List[Pessoa] = []
 
 
-# CRUD Endpoints
-
-# Cadastrar uma nova pessoa
-@app.post("/pessoas/")
-def cadastrar_pessoa(pessoa: Pessoa):
-    db_pessoas.append(pessoa)
-    return {"msg": "Pessoa cadastrada com sucesso!"}
+@app.get("/")
+def read_root():
+    return {"message": "Bem-vindo(a) à API de Gestão de Pessoas!"}
 
 
-# Listar todas as pessoas
+@app.post("/pessoas/", response_model=Pessoa)
+def create_pessoa(pessoa: Pessoa):
+    pessoa.id = str(uuid.uuid4())
+    db.append(pessoa)
+    return pessoa
+
+
 @app.get("/pessoas/", response_model=List[Pessoa])
-def listar_pessoas():
-    return db_pessoas
+def read_pessoas():
+    return db
 
 
-# Obter detalhes de uma pessoa específica pelo CPF
-@app.get("/pessoas/{cpf}", response_model=Pessoa)
-def obter_pessoa(cpf: str):
-    for pessoa in db_pessoas:
-        if pessoa.cpf == cpf:
+@app.get("/pessoas/{pessoa_id}", response_model=Pessoa)
+def read_pessoa(pessoa_id: str):
+    for pessoa in db:
+        if pessoa.id == pessoa_id:
             return pessoa
-    return {"msg": "Pessoa não encontrada."}
+    raise HTTPException(status_code=404, detail="Pessoa não encontrada")
 
 
-# Atualizar os dados de uma pessoa
-@app.put("/pessoas/{cpf}")
-def atualizar_pessoa(cpf: str, pessoa_atualizada: Pessoa):
-    for index, pessoa in enumerate(db_pessoas):
-        if pessoa.cpf == cpf:
-            db_pessoas[index] = pessoa_atualizada
-            return {"msg": "Pessoa atualizada com sucesso!"}
-    return {"msg": "Pessoa não encontrada."}
+@app.put("/pessoas/{pessoa_id}", response_model=Pessoa)
+def update_pessoa(pessoa_id: str, pessoa_atualizada: Pessoa):
+    for index, pessoa in enumerate(db):
+        if pessoa.id == pessoa_id:
+            db[index] = pessoa_atualizada
+            db[index].id = pessoa_id  # Garante que o ID permanece o mesmo
+            return db[index]
+    raise HTTPException(status_code=404, detail="Pessoa não encontrada")
 
 
-# Excluir uma pessoa
-@app.delete("/pessoas/{cpf}")
-def excluir_pessoa(cpf: str):
-    for index, pessoa in enumerate(db_pessoas):
-        if pessoa.cpf == cpf:
-            del db_pessoas[index]
-            return {"msg": "Pessoa excluída com sucesso!"}
-    return {"msg": "Pessoa não encontrada."}
+@app.delete("/pessoas/{pessoa_id}", response_model=None)
+def delete_pessoa(pessoa_id: str):
+    for index, pessoa in enumerate(db):
+        if pessoa.id == pessoa_id:
+            del db[index]
+            return
+    raise HTTPException(status_code=404, detail="Pessoa não encontrada")
