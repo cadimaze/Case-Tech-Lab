@@ -66,8 +66,6 @@ Os endpoints disponíveis podem ser vistos e até mesmo testados diretamente pel
 
 Esta é outra forma de visualizar a documentação, com um estilo diferente: 'http://127.0.0.1:8000/redoc'
 
-Você pode acessar a documentação da API e testar os endpoints usando a interface do Swagger UI em: `http://127.0.0.1:8000/docs`.
-
 ## Contribuições
 
 Contribuições são sempre bem-vindas! Se você tem alguma sugestão para melhorar este projeto, sinta-se à vontade para criar um pull request.
