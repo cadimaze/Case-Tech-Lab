@@ -61,6 +61,8 @@ uvicorn app.main:app --reload
 
 
 A aplicação estará acessível em: `http://127.0.0.1:8000`.
+Os endpoints disponíveis podem ser vistos e até mesmo testados diretamente pelo navegador em: 'http://127.0.0.1:8000/docs'.
+Esta é outra forma de visualizar a documentação, com um estilo diferente: 'http://127.0.0.1:8000/redoc'
 
 Você pode acessar a documentação da API e testar os endpoints usando a interface do Swagger UI em: `http://127.0.0.1:8000/docs`.
 
