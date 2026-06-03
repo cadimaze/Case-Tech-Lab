@@ -1,62 +1,68 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from typing import List
-from pydantic import BaseModel
-from datetime import date
+import re
 
+from models import Pessoa
 
-class Pessoa(BaseModel):
-    nome_completo: str
-    data_nascimento: date
-    endereco: str
-    cpf: str
-    estado_civil: str
+app = FastAPI(
+    title="Sistema de Gestão de Pessoas",
+    description="API REST para cadastro e gestão de informações de pessoas.",
+    version="1.0.0",
+)
 
-
-app = FastAPI()
-
-# Lista para armazenar as pessoas cadastradas (nossa "base de dados" em memória)
 db_pessoas: List[Pessoa] = []
 
 
-# CRUD Endpoints
+def _normalizar_cpf(cpf: str) -> str:
+    digits = re.sub(r"\D", "", cpf)
+    if len(digits) == 11:
+        return f"{digits[:3]}.{digits[3:6]}.{digits[6:9]}-{digits[9:]}"
+    return cpf
 
-# Cadastrar uma nova pessoa
-@app.post("/pessoas/")
+
+def _encontrar_pessoa(cpf: str) -> tuple[int, Pessoa]:
+    cpf_normalizado = _normalizar_cpf(cpf)
+    for index, pessoa in enumerate(db_pessoas):
+        if pessoa.cpf == cpf_normalizado:
+            return index, pessoa
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Pessoa não encontrada.",
+    )
+
+
+@app.post("/pessoas/", status_code=status.HTTP_201_CREATED)
 def cadastrar_pessoa(pessoa: Pessoa):
+    for p in db_pessoas:
+        if p.cpf == pessoa.cpf:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Já existe uma pessoa cadastrada com este CPF.",
+            )
     db_pessoas.append(pessoa)
     return {"msg": "Pessoa cadastrada com sucesso!"}
 
 
-# Listar todas as pessoas
 @app.get("/pessoas/", response_model=List[Pessoa])
 def listar_pessoas():
     return db_pessoas
 
 
-# Obter detalhes de uma pessoa específica pelo CPF
 @app.get("/pessoas/{cpf}", response_model=Pessoa)
 def obter_pessoa(cpf: str):
-    for pessoa in db_pessoas:
-        if pessoa.cpf == cpf:
-            return pessoa
-    return {"msg": "Pessoa não encontrada."}
+    _, pessoa = _encontrar_pessoa(cpf)
+    return pessoa
 
 
-# Atualizar os dados de uma pessoa
 @app.put("/pessoas/{cpf}")
 def atualizar_pessoa(cpf: str, pessoa_atualizada: Pessoa):
-    for index, pessoa in enumerate(db_pessoas):
-        if pessoa.cpf == cpf:
-            db_pessoas[index] = pessoa_atualizada
-            return {"msg": "Pessoa atualizada com sucesso!"}
-    return {"msg": "Pessoa não encontrada."}
+    index, _ = _encontrar_pessoa(cpf)
+    db_pessoas[index] = pessoa_atualizada
+    return {"msg": "Pessoa atualizada com sucesso!"}
 
 
-# Excluir uma pessoa
 @app.delete("/pessoas/{cpf}")
 def excluir_pessoa(cpf: str):
-    for index, pessoa in enumerate(db_pessoas):
-        if pessoa.cpf == cpf:
-            del db_pessoas[index]
-            return {"msg": "Pessoa excluída com sucesso!"}
-    return {"msg": "Pessoa não encontrada."}
+    index, _ = _encontrar_pessoa(cpf)
+    del db_pessoas[index]
+    return {"msg": "Pessoa excluída com sucesso!"}

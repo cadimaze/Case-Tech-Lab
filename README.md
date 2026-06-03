@@ -1,75 +1,74 @@
 # Sistema de Gestão de Pessoas
 
-Este projeto implementa uma API REST simples para o cadastro e gestão de informações de pessoas, permitindo operações básicas como cadastro, consulta, atualização e exclusão de registros (CRUD).
+API REST para cadastro e gestão de informações de pessoas, com operações completas de CRUD (Create, Read, Update, Delete).
 
-## Tecnologias Utilizadas
+## Tecnologias
 
 - Python 3.12
 - FastAPI
-- Uvicorn para servir a aplicação
-- Swagger UI para documentação da API
-
-## Funcionalidades
-
-- Cadastro de pessoas
-- Consulta de pessoas cadastradas
-- Atualização dos dados cadastrais
-- Exclusão de registros
+- Pydantic v2
+- Uvicorn
 
 ## Estrutura do Projeto
 
-projeto/
-│
-├── app/
-│ ├── init.py
-│ ├── main.py # Arquivo principal contendo a lógica da API
-│ └── models.py # Definições dos modelos de dados
-│
+```
+Case-Tech-Lab/
+├── main.py          # Aplicação FastAPI e endpoints
+├── models.py        # Modelos de dados com validações
+├── requirements.txt # Dependências do projeto
 └── README.md
+```
 
+## Endpoints
+
+| Método   | Rota             | Descrição                        |
+|----------|------------------|----------------------------------|
+| `POST`   | `/pessoas/`      | Cadastra uma nova pessoa         |
+| `GET`    | `/pessoas/`      | Lista todas as pessoas           |
+| `GET`    | `/pessoas/{cpf}` | Retorna uma pessoa pelo CPF      |
+| `PUT`    | `/pessoas/{cpf}` | Atualiza os dados de uma pessoa  |
+| `DELETE` | `/pessoas/{cpf}` | Remove uma pessoa pelo CPF       |
 
 ## Como Configurar
 
-Para configurar este projeto em seu ambiente local, siga estes passos:
+1. Clone o repositório:
 
-1. Clone o repositório para sua máquina local:
-
+```bash
 git clone https://github.com/cadimaze/Case-Tech-Lab.git
+cd Case-Tech-Lab
+```
 
+2. Crie e ative um ambiente virtual:
 
-2. Acesse o diretório do projeto:
-
-cd D:\Projetos DEV\CaseBackEndTEchLabs
-
-
-3. (Opcional) Crie e ative um ambiente virtual:
-
+```bash
 python -m venv venv
-source venv/bin/activate (No Windows use venv\Scripts\activate)
+source venv/bin/activate        # Linux/macOS
+# venv\Scripts\activate         # Windows
+```
 
+3. Instale as dependências:
 
-4. Instale as dependências necessárias:
-
+```bash
 pip install -r requirements.txt
-
+```
 
 ## Como Executar
 
-Para executar a aplicação, use o seguinte comando:
+```bash
+uvicorn main:app --reload
+```
 
-uvicorn app.main:app --reload
+A aplicação estará disponível em `http://127.0.0.1:8000`.
 
+- Documentação interativa (Swagger): `http://127.0.0.1:8000/docs`
+- Documentação alternativa (ReDoc): `http://127.0.0.1:8000/redoc`
 
-A aplicação estará acessível em: `http://127.0.0.1:8000`.
+## Validações
 
-Os endpoints disponíveis podem ser vistos e até mesmo testados diretamente pelo navegador em: 'http://127.0.0.1:8000/docs'.
-
-Esta é outra forma de visualizar a documentação, com um estilo diferente: 'http://127.0.0.1:8000/redoc'
-
-## Contribuições
-
-Contribuições são sempre bem-vindas! Se você tem alguma sugestão para melhorar este projeto, sinta-se à vontade para criar um pull request.
+- **CPF**: aceita com ou sem formatação, valida os dígitos verificadores pelo algoritmo oficial
+- **Data de nascimento**: deve ser uma data no passado
+- **Estado civil**: valores aceitos — `solteiro(a)`, `casado(a)`, `divorciado(a)`, `viúvo(a)`, `separado(a)`, `união estável`
 
 ## Licença
 
-[MIT](LINK_PARA_SUA_LICENCA)
+[MIT](LICENSE.md)
