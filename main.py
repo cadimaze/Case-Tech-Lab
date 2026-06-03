@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import HTMLResponse
 from typing import List
+import os
 import re
 
 from models import Pessoa
@@ -10,7 +12,16 @@ app = FastAPI(
     version="1.0.0",
 )
 
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 db_pessoas: List[Pessoa] = []
+
+
+@app.get("/", include_in_schema=False)
+def frontend():
+    html_path = os.path.join(_BASE_DIR, "static", "index.html")
+    with open(html_path, encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
 
 
 def _normalizar_cpf(cpf: str) -> str:
