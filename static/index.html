@@ -3,86 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Educacional — Sistema de Gestão de Pessoas</title>
+    <title>CRUD Lab — Aprenda CRUD na Prática</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --post:          #16a34a;
-            --post-light:    #f0fdf4;
-            --post-border:   #86efac;
-            --get:           #1d4ed8;
-            --get-light:     #eff6ff;
-            --get-border:    #93c5fd;
-            --put:           #b45309;
-            --put-light:     #fffbeb;
-            --put-border:    #fcd34d;
-            --del:           #b91c1c;
-            --del-light:     #fef2f2;
-            --del-border:    #fca5a5;
-            --bg:            #f1f5f9;
-            --card:          #ffffff;
-            --text:          #1e293b;
-            --muted:         #64748b;
-            --border:        #e2e8f0;
-            --radius:        12px;
-            --shadow:        0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
-            --shadow-md:     0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+            --post:        #16a34a;
+            --post-light:  #f0fdf4;
+            --post-border: #86efac;
+            --get:         #1d4ed8;
+            --get-light:   #eff6ff;
+            --get-border:  #93c5fd;
+            --put:         #b45309;
+            --put-light:   #fffbeb;
+            --put-border:  #fcd34d;
+            --del:         #b91c1c;
+            --del-light:   #fef2f2;
+            --del-border:  #fca5a5;
+            --bg:          #f1f5f9;
+            --card:        #ffffff;
+            --text:        #1e293b;
+            --muted:       #64748b;
+            --border:      #e2e8f0;
+            --radius:      14px;
+            --code-bg:     #0f172a;
+            --font-head:   'Space Grotesk', sans-serif;
+            --font-body:   'Inter', system-ui, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--font-body);
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
         }
 
-        /* ── Header ── */
-        header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1e3a5f 100%);
-            color: #fff;
-            padding: 2.5rem 1.5rem;
-            text-align: center;
+        h1, h2, h3, h4, .nav-logo, .section-head h2 {
+            font-family: var(--font-head);
         }
-        header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
-        header p  { color: #94a3b8; margin: 0.4rem auto 0; max-width: 580px; }
-        .header-badges { display: flex; justify-content: center; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
 
-        /* ── Layout ── */
-        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .gap-sm  { gap: .75rem; }
-        @media (max-width: 820px) { .grid-2 { grid-template-columns: 1fr; } }
+        /* ══════════════════════════════════════════
+           HERO
+        ══════════════════════════════════════════ */
+        .hero {
+            background: linear-gradient(145deg, #06091a 0%, #0d1525 40%, #0c1f38 70%, #130d30 100%);
+            color: #fff;
+            padding: 6rem 1.5rem 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(99,102,241,.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,.06) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+        }
+        .hero-glow {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+        .hero-glow-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(99,102,241,.22) 0%, transparent 70%);
+            top: -200px; left: 50%; transform: translateX(-50%);
+        }
+        .hero-glow-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(16,163,74,.12) 0%, transparent 70%);
+            bottom: 0; left: 15%;
+        }
+        .hero-glow-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(29,78,216,.12) 0%, transparent 70%);
+            bottom: 0; right: 15%;
+        }
 
-        /* ── Cards ── */
+        .hero-inner { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
+
+        .hero-title {
+            font-family: var(--font-head);
+            font-size: clamp(4rem, 10vw, 7.5rem);
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: .6rem;
+        }
+        .hero-crud { color: #ffffff; }
+        .hero-lab  {
+            background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #c4b5fd 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-family: var(--font-head);
+            font-size: clamp(.85rem, 2vw, 1.05rem);
+            font-weight: 600;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-desc {
+            color: #94a3b8;
+            font-size: clamp(.9rem, 2vw, 1.05rem);
+            max-width: 580px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.75;
+        }
+
+        .hero-methods {
+            display: flex; justify-content: center; gap: .6rem; flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+        .method-chip {
+            display: flex; align-items: center; gap: .45rem;
+            padding: .5rem 1.1rem; border-radius: 999px;
+            font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+            border: 1.5px solid; cursor: pointer;
+            transition: transform .15s, box-shadow .15s;
+            text-decoration: none; font-family: var(--font-head);
+        }
+        .method-chip:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+        .mc-post   { background: rgba(22,163,74,.12);  border-color: rgba(22,163,74,.35);  color: #4ade80; }
+        .mc-get    { background: rgba(29,78,216,.12);  border-color: rgba(29,78,216,.35);  color: #60a5fa; }
+        .mc-put    { background: rgba(180,83,9,.12);   border-color: rgba(180,83,9,.35);   color: #fbbf24; }
+        .mc-delete { background: rgba(185,28,28,.12);  border-color: rgba(185,28,28,.35);  color: #f87171; }
+
+        .hero-features {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+            max-width: 900px; margin: 0 auto;
+        }
+        @media (max-width: 720px) { .hero-features { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 420px) { .hero-features { grid-template-columns: 1fr; } }
+
+        .hero-feat {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 12px; padding: 1rem; text-align: left;
+            transition: background .2s;
+        }
+        .hero-feat:hover { background: rgba(255,255,255,.07); }
+        .hero-feat .icon { font-size: 1.4rem; margin-bottom: .4rem; display: block; }
+        .hero-feat strong { font-size: .82rem; color: #e2e8f0; display: block; margin-bottom: .15rem; font-family: var(--font-head); }
+        .hero-feat span { font-size: .74rem; color: #64748b; line-height: 1.45; }
+
+        /* ══════════════════════════════════════════
+           DEMO BANNER
+        ══════════════════════════════════════════ */
+        .demo-banner {
+            background: linear-gradient(90deg, #312e81, #4338ca, #312e81);
+            color: #c7d2fe; text-align: center;
+            padding: .6rem 1rem; font-size: .8rem; font-weight: 600;
+            letter-spacing: .02em;
+        }
+        .demo-banner code { background: rgba(255,255,255,.15); padding: .1rem .4rem; border-radius: 4px; font-size: .78rem; }
+
+        /* ══════════════════════════════════════════
+           STICKY NAV
+        ══════════════════════════════════════════ */
+        .sticky-nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(13,21,37,.93);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            padding: 0 1.5rem;
+        }
+        .sticky-nav-inner {
+            max-width: 1280px; margin: 0 auto;
+            display: flex; align-items: center; gap: .25rem;
+            overflow-x: auto; scrollbar-width: none;
+        }
+        .sticky-nav-inner::-webkit-scrollbar { display: none; }
+        .nav-logo {
+            font-size: .95rem; font-weight: 800; color: #818cf8;
+            letter-spacing: -0.5px; margin-right: .85rem; white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .nav-link {
+            display: flex; align-items: center; gap: .3rem;
+            color: #64748b; text-decoration: none;
+            font-size: .78rem; font-weight: 600;
+            padding: .75rem .75rem; border-bottom: 2px solid transparent;
+            white-space: nowrap; flex-shrink: 0;
+            transition: color .15s, border-color .15s;
+        }
+        .nav-link:hover         { color: #e2e8f0; }
+        .nav-link.nl-post:hover { color: #4ade80; border-bottom-color: #4ade80; }
+        .nav-link.nl-get:hover  { color: #60a5fa; border-bottom-color: #60a5fa; }
+        .nav-link.nl-put:hover  { color: #fbbf24; border-bottom-color: #fbbf24; }
+        .nav-link.nl-del:hover  { color: #f87171; border-bottom-color: #f87171; }
+        .nav-dot { width: 6px; height: 6px; border-radius: 50%; }
+        .nd-post   { background: #4ade80; }
+        .nd-get    { background: #60a5fa; }
+        .nd-put    { background: #fbbf24; }
+        .nd-delete { background: #f87171; }
+        .nd-db     { background: #a78bfa; }
+
+        /* ══════════════════════════════════════════
+           LAYOUT
+        ══════════════════════════════════════════ */
+        .container { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .section-mb { margin-bottom: 2rem; }
+        .crud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+        @media (max-width: 960px) { .crud-grid { grid-template-columns: 1fr; } }
+
+        /* ══════════════════════════════════════════
+           CARDS
+        ══════════════════════════════════════════ */
         .card {
-            background: var(--card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            background: var(--card); border-radius: var(--radius);
+            box-shadow: 0 1px 4px rgba(0,0,0,.07);
             overflow: hidden;
         }
         .card-header {
-            padding: .9rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: .6rem;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
+            padding: .9rem 1.25rem; display: flex; align-items: center; gap: .6rem;
+            border-bottom: 1px solid var(--border); flex-wrap: wrap;
         }
-        .card-header strong { font-size: .95rem; }
+        .card-header strong { font-size: .9rem; font-family: var(--font-head); }
         .card-body { padding: 1.25rem; }
-
         .card-post   { border-top: 4px solid var(--post); }
         .card-get    { border-top: 4px solid var(--get);  }
         .card-put    { border-top: 4px solid var(--put);  }
         .card-delete { border-top: 4px solid var(--del);  }
 
-        /* ── Badges ── */
+        /* ══════════════════════════════════════════
+           SECTION HEADERS
+        ══════════════════════════════════════════ */
+        .section-head { display: flex; align-items: center; gap: .85rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .step-num {
+            width: 34px; height: 34px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .8rem; font-weight: 800; flex-shrink: 0; border: 2px solid;
+            font-family: var(--font-head);
+        }
+        .sn-post   { border-color: var(--post); color: var(--post); background: var(--post-light); }
+        .sn-get    { border-color: var(--get);  color: var(--get);  background: var(--get-light);  }
+        .sn-put    { border-color: var(--put);  color: var(--put);  background: var(--put-light);  }
+        .sn-delete { border-color: var(--del);  color: var(--del);  background: var(--del-light);  }
+        .section-head h2 { font-size: 1.1rem; font-weight: 700; }
+        .section-head .desc { color: var(--muted); font-size: .82rem; }
+
+        /* ══════════════════════════════════════════
+           BADGES & PILLS
+        ══════════════════════════════════════════ */
         .badge {
-            font-size: .7rem; font-weight: 800;
-            padding: .2rem .65rem; border-radius: 999px;
-            letter-spacing: .06em; text-transform: uppercase;
-            flex-shrink: 0;
+            font-size: .68rem; font-weight: 800; padding: .2rem .65rem;
+            border-radius: 999px; letter-spacing: .06em; text-transform: uppercase;
+            flex-shrink: 0; font-family: var(--font-head);
         }
         .badge-post   { background: var(--post); color: #fff; }
         .badge-get    { background: var(--get);  color: #fff; }
@@ -90,140 +268,172 @@
         .badge-delete { background: var(--del);  color: #fff; }
         .badge-info   { background: #6366f1;     color: #fff; }
 
-        .endpoint { font-family: monospace; font-size: .85rem; color: var(--muted); background: #f8fafc; padding: .2rem .5rem; border-radius: 4px; }
+        .endpoint { font-family: monospace; font-size: .8rem; color: var(--muted); background: #f8fafc; padding: .2rem .5rem; border-radius: 4px; }
+        code { background: #f1f5f9; padding: .1rem .35rem; border-radius: 4px; font-family: monospace; font-size: .83em; }
 
-        /* ── Theory table ── */
-        .theory { margin-bottom: 1.5rem; }
-        .theory h2 { font-size: 1.05rem; color: #4f46e5; margin-bottom: .75rem; }
-        .theory p  { font-size: .9rem; color: var(--muted); margin-bottom: .75rem; }
-
-        .tbl { width: 100%; border-collapse: collapse; font-size: .85rem; }
-        .tbl th { background: #f8fafc; padding: .6rem .9rem; text-align: left; border-bottom: 2px solid var(--border); color: var(--muted); text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; }
-        .tbl td { padding: .6rem .9rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .tbl tr:last-child td { border-bottom: none; }
-
-        code { background: #f1f5f9; padding: .1rem .4rem; border-radius: 4px; font-family: monospace; font-size: .85em; }
-
-        .pill {
-            display: inline-block; padding: .15rem .6rem;
-            border-radius: 999px; font-size: .75rem; font-weight: 700;
-        }
+        .pill { display: inline-block; padding: .12rem .55rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
         .pill-green  { background: #dcfce7; color: #166534; }
         .pill-blue   { background: #dbeafe; color: #1e40af; }
         .pill-orange { background: #fef3c7; color: #92400e; }
         .pill-red    { background: #fee2e2; color: #991b1b; }
-        .pill-gray   { background: #f1f5f9; color: #475569; }
 
-        /* ── Edu note ── */
+        /* ══════════════════════════════════════════
+           THEORY — METHOD CARDS
+        ══════════════════════════════════════════ */
+        .method-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin: 1.25rem 0; }
+        @media (max-width: 700px) { .method-cards { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 420px) { .method-cards { grid-template-columns: 1fr; } }
+        .mc { border-radius: 10px; padding: 1rem; border: 1.5px solid; }
+        .mc-post-card { background: var(--post-light); border-color: var(--post-border); }
+        .mc-get-card  { background: var(--get-light);  border-color: var(--get-border);  }
+        .mc-put-card  { background: var(--put-light);  border-color: var(--put-border);  }
+        .mc-del-card  { background: var(--del-light);  border-color: var(--del-border);  }
+        .mc .mc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; }
+        .mc .mc-verb { font-family: monospace; font-size: .68rem; font-weight: 700; }
+        .mc-post-card .mc-verb { color: #166534; }
+        .mc-get-card  .mc-verb { color: #1e40af; }
+        .mc-put-card  .mc-verb { color: #92400e; }
+        .mc-del-card  .mc-verb { color: #991b1b; }
+        .mc h4 { font-size: .82rem; font-weight: 700; margin-bottom: .2rem; font-family: var(--font-head); }
+        .mc p  { font-size: .77rem; color: var(--muted); line-height: 1.45; }
+        .mc .mc-status { margin-top: .45rem; }
+
+        /* ══════════════════════════════════════════
+           EDU NOTE
+        ══════════════════════════════════════════ */
         .edu-note {
-            background: #fefce8;
-            border-left: 3px solid #eab308;
-            padding: .75rem 1rem;
-            border-radius: 0 6px 6px 0;
-            font-size: .83rem;
-            color: #713f12;
-            margin-bottom: 1rem;
-            line-height: 1.5;
+            background: #fefce8; border-left: 3px solid #eab308;
+            padding: .85rem 1rem; border-radius: 0 8px 8px 0;
+            font-size: .83rem; color: #713f12; margin-bottom: 1rem; line-height: 1.6;
         }
-        .edu-note strong { display: block; margin-bottom: .2rem; color: #78350f; }
-        .edu-note code   { background: #fef08a; color: #713f12; }
+        .edu-note strong { display: block; margin-bottom: .2rem; color: #78350f; font-family: var(--font-head); }
+        .edu-note code { background: #fef08a; color: #713f12; }
 
-        /* ── Forms ── */
-        .form-group { margin-bottom: .85rem; }
+        /* ══════════════════════════════════════════
+           FORMS
+        ══════════════════════════════════════════ */
+        .form-group { margin-bottom: .8rem; }
         .form-group label {
-            display: block; font-size: .75rem; font-weight: 700;
-            color: var(--muted); margin-bottom: .3rem;
-            text-transform: uppercase; letter-spacing: .05em;
+            display: block; font-size: .7rem; font-weight: 700;
+            color: var(--muted); margin-bottom: .25rem;
+            text-transform: uppercase; letter-spacing: .05em; font-family: var(--font-head);
         }
-        .form-group input,
-        .form-group select {
-            width: 100%; padding: .55rem .85rem;
+        .form-group input, .form-group select {
+            width: 100%; padding: .5rem .85rem;
             border: 1.5px solid var(--border); border-radius: 8px;
-            font-size: .9rem; outline: none;
+            font-size: .875rem; outline: none;
             transition: border-color .15s, box-shadow .15s;
-            background: #fff; color: var(--text);
+            background: #fff; color: var(--text); font-family: var(--font-body);
         }
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+        .form-group input:focus, .form-group select:focus {
+            border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12);
         }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+        @media (max-width: 420px) { .grid-2 { grid-template-columns: 1fr; } }
 
-        /* ── Buttons ── */
+        /* ══════════════════════════════════════════
+           BUTTONS
+        ══════════════════════════════════════════ */
         .btn {
-            display: flex; align-items: center; justify-content: center; gap: .45rem;
-            width: 100%; padding: .6rem 1.2rem;
+            display: flex; align-items: center; justify-content: center; gap: .4rem;
+            width: 100%; padding: .65rem 1.2rem;
             border: none; border-radius: 8px;
-            font-size: .88rem; font-weight: 700;
-            cursor: pointer;
-            transition: filter .15s, transform .1s;
+            font-size: .875rem; font-weight: 700;
+            cursor: pointer; transition: filter .15s, transform .1s;
+            font-family: var(--font-head);
         }
-        .btn:hover   { filter: brightness(1.08); }
-        .btn:active  { transform: scale(.98); }
-        .btn-post    { background: var(--post); color: #fff; }
-        .btn-get     { background: var(--get);  color: #fff; }
-        .btn-put     { background: var(--put);  color: #fff; }
-        .btn-delete  { background: var(--del);  color: #fff; }
+        .btn:hover  { filter: brightness(1.08); }
+        .btn:active { transform: scale(.98); }
+        .btn-post   { background: var(--post); color: #fff; }
+        .btn-get    { background: var(--get);  color: #fff; }
+        .btn-put    { background: var(--put);  color: #fff; }
+        .btn-delete { background: var(--del);  color: #fff; }
         .btn-outline {
             background: transparent; color: var(--muted);
             border: 1.5px solid var(--border); width: auto;
-            padding: .3rem .8rem; font-size: .78rem; font-weight: 600;
+            padding: .3rem .75rem; font-size: .78rem; font-weight: 600;
         }
         .btn-outline:hover { border-color: var(--get); color: var(--get); filter: none; }
 
-        /* ── Response box ── */
-        .response-box { margin-top: .9rem; display: none; }
-        .response-box.show { display: block; }
-
-        .res-status {
-            display: inline-block; font-family: monospace; font-weight: 800;
-            padding: .2rem .65rem; border-radius: 4px;
-            margin-bottom: .4rem; font-size: .82rem;
+        /* ══════════════════════════════════════════
+           HTTP INSPECTOR
+        ══════════════════════════════════════════ */
+        .inspector { display: flex; flex-direction: column; gap: 1rem; }
+        .inspector-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .35rem; font-family: var(--font-head); }
+        .http-panel { border-radius: var(--radius); overflow: hidden; }
+        .http-panel-header {
+            padding: .5rem .9rem; display: flex; align-items: center; gap: .5rem;
+            font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+            font-family: var(--font-head);
         }
-        .res-2xx { background: #dcfce7; color: #166534; }
-        .res-4xx { background: #fee2e2; color: #991b1b; }
-        .res-5xx { background: #fef3c7; color: #92400e; }
-
-        .res-body {
-            background: #0f172a; color: #e2e8f0;
-            padding: .85rem 1rem; border-radius: 8px;
-            font-family: 'Courier New', monospace; font-size: .8rem;
-            white-space: pre-wrap; max-height: 180px; overflow-y: auto;
+        .http-panel-header .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .req-header          { background: #1e3a5f; color: #93c5fd; }
+        .req-header .dot     { background: #60a5fa; }
+        .res-header-ok       { background: #14532d; color: #86efac; }
+        .res-header-ok .dot  { background: #4ade80; }
+        .res-header-err      { background: #450a0a; color: #fca5a5; }
+        .res-header-err .dot { background: #f87171; }
+        .http-code {
+            background: var(--code-bg); color: #e2e8f0;
+            padding: .9rem 1rem; font-family: 'Courier New', monospace; font-size: .78rem;
+            white-space: pre-wrap; line-height: 1.65; min-height: 110px; max-height: 280px; overflow-y: auto;
         }
+        .c-method-post { color: #4ade80; font-weight: 800; }
+        .c-method-get  { color: #60a5fa; font-weight: 800; }
+        .c-method-put  { color: #fbbf24; font-weight: 800; }
+        .c-method-del  { color: #f87171; font-weight: 800; }
+        .c-url   { color: #e2e8f0; }
+        .c-hkey  { color: #94a3b8; }
+        .c-hval  { color: #c4b5fd; }
+        .c-jkey  { color: #7dd3fc; }
+        .c-jstr  { color: #86efac; }
+        .c-jnum  { color: #fb923c; }
+        .c-placeholder { color: #334155; font-style: italic; }
 
-        /* ── Database table ── */
-        .db-header {
-            display: flex; align-items: center; gap: .6rem;
-            padding: .9rem 1.25rem; border-bottom: 1px solid var(--border);
+        /* ══════════════════════════════════════════
+           ERROR EXPLANATION
+        ══════════════════════════════════════════ */
+        .error-explain {
+            background: #fff7ed; border-left: 4px solid #f97316;
+            border-radius: 0 10px 10px 0; padding: .85rem 1rem;
+            font-size: .82rem; line-height: 1.6; color: #431407;
+            animation: fadeIn .3s ease-out;
         }
-        .db-header h3 { font-size: 1rem; font-weight: 700; }
-        .db-header .btn-outline { margin-left: auto; }
+        .error-explain .ee-top {
+            display: flex; align-items: center; gap: .4rem;
+            font-weight: 800; color: #c2410c; margin-bottom: .3rem; font-size: .85rem;
+            font-family: var(--font-head);
+        }
+        .error-explain .ee-code { font-family: monospace; background: #fed7aa; color: #9a3412; padding: .1rem .4rem; border-radius: 4px; font-size: .78rem; }
+        .error-explain p { color: #7c2d12; }
+        .error-explain code { background: #fed7aa; color: #9a3412; }
 
+        /* ══════════════════════════════════════════
+           DATABASE
+        ══════════════════════════════════════════ */
         .db-table-wrap { overflow-x: auto; }
-        .db-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
-        .db-table thead th {
-            background: #f8fafc; padding: .65rem 1rem; text-align: left;
-            border-bottom: 2px solid var(--border);
-            font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
-        }
+        .db-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+        .db-table thead th { background: #f8fafc; padding: .6rem 1rem; text-align: left; border-bottom: 2px solid var(--border); font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-family: var(--font-head); }
         .db-table tbody tr { border-bottom: 1px solid var(--border); transition: background .12s; }
         .db-table tbody tr:hover { background: #f8fafc; }
         .db-table tbody tr:last-child { border-bottom: none; }
-        .db-table tbody td { padding: .65rem 1rem; }
-
-        .empty-state {
-            text-align: center; padding: 2.5rem; color: var(--muted);
-        }
+        .db-table tbody td { padding: .6rem 1rem; }
+        .empty-state { text-align: center; padding: 2.5rem; color: var(--muted); }
         .empty-state .ico { font-size: 2.5rem; margin-bottom: .5rem; }
+        .db-meta { padding: .5rem 1.25rem; border-top: 1px solid var(--border); font-size: .74rem; color: var(--muted); }
 
-        /* ── Request log ── */
+        /* ══════════════════════════════════════════
+           LOG
+        ══════════════════════════════════════════ */
         .log-wrap {
-            background: #0f172a; border-radius: 8px;
-            max-height: 220px; overflow-y: auto; padding: .5rem .75rem;
+            background: var(--code-bg); border-radius: 10px;
+            max-height: 280px; overflow-y: auto; padding: .5rem .6rem;
             font-family: 'Courier New', monospace; font-size: .78rem;
         }
-        .log-entry { padding: .3rem 0; border-bottom: 1px solid #1e293b; line-height: 1.4; }
+        .log-entry { padding: .3rem .4rem; border-bottom: 1px solid #1e293b; line-height: 1.45; }
         .log-entry:last-child { border-bottom: none; }
+        .log-main  { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; }
+        .log-body  { color: #475569; padding-top: .15rem; word-break: break-all; font-size: .73rem; }
         .lm { font-weight: 800; }
         .lm-POST   { color: #4ade80; }
         .lm-GET    { color: #60a5fa; }
@@ -235,177 +445,201 @@
         .lt  { color: #475569; }
         .log-empty { color: #334155; text-align: center; padding: 1.5rem; }
 
-        /* ── Misc ── */
-        .divider { height: 1px; background: var(--border); margin: 1rem 0; }
-        .section-mb { margin-bottom: 1.5rem; }
-        .warn-box {
-            background: var(--del-light); border: 1px solid var(--del-border);
-            border-radius: 8px; padding: .85rem 1rem;
-            font-size: .82rem; color: #7f1d1d; margin-top: .75rem;
-        }
+        /* ══════════════════════════════════════════
+           MISC
+        ══════════════════════════════════════════ */
+        .warn-box { background: var(--del-light); border: 1px solid var(--del-border); border-radius: 8px; padding: .8rem 1rem; font-size: .82rem; color: #7f1d1d; margin-top: .85rem; }
 
-        @keyframes flash { from { background: #fef9c3; } to { background: transparent; } }
+        footer {
+            background: #0d1525; color: #334155;
+            text-align: center; padding: 2rem 1rem;
+            font-size: .78rem; margin-top: .5rem;
+        }
+        footer .footer-logo { font-family: var(--font-head); font-size: 1.1rem; font-weight: 800; color: #818cf8; margin-bottom: .4rem; }
+        footer p { color: #475569; }
+
+        @keyframes flash    { from { background: #fef9c3; } to { background: transparent; } }
+        @keyframes fadeIn   { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pageLoad { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .flash-row { animation: flash 1.4s ease-out; }
+        .fade-in   { animation: fadeIn .25s ease-out; }
+        body       { animation: pageLoad .65s cubic-bezier(.22,1,.36,1) both; }
     </style>
 </head>
 <body>
 
-<!-- ═══════════ HEADER ═══════════ -->
-<header>
-    <h1>📚 CRUD Educacional</h1>
-    <p>Aprenda como funciona um CRUD interagindo com uma API REST real em tempo real</p>
-    <div class="header-badges">
-        <span class="badge badge-post">POST — Create</span>
-        <span class="badge badge-get">GET — Read</span>
-        <span class="badge badge-put">PUT — Update</span>
-        <span class="badge badge-delete">DELETE — Delete</span>
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-glow hero-glow-3"></div>
+    <div class="hero-inner">
+        <h1 class="hero-title">
+            <span class="hero-crud">CRUD</span><span class="hero-lab">Lab</span>
+        </h1>
+        <p class="hero-tagline">Create · Read · Update · Delete</p>
+        <p class="hero-desc">
+            Aprenda as 4 operações fundamentais de banco de dados executando-as ao vivo —
+            veja cada requisição HTTP sendo construída e a resposta do servidor em tempo real.
+        </p>
+        <div class="hero-methods">
+            <a href="#section-post"   class="method-chip mc-post">   ● POST — Create</a>
+            <a href="#section-get"    class="method-chip mc-get">    ● GET — Read</a>
+            <a href="#section-put"    class="method-chip mc-put">    ● PUT — Update</a>
+            <a href="#section-delete" class="method-chip mc-delete"> ● DELETE — Delete</a>
+        </div>
+        <div class="hero-features">
+            <div class="hero-feat">
+                <span class="icon">⚡</span>
+                <strong>Requisição ao vivo</strong>
+                <span>Veja o JSON sendo montado conforme você preenche o formulário</span>
+            </div>
+            <div class="hero-feat">
+                <span class="icon">📥</span>
+                <strong>Resposta real</strong>
+                <span>Status HTTP e corpo da resposta exibidos após o envio</span>
+            </div>
+            <div class="hero-feat">
+                <span class="icon">🔍</span>
+                <strong>Erros explicados</strong>
+                <span>Cada erro HTTP tem uma explicação didática do que aconteceu</span>
+            </div>
+            <div class="hero-feat">
+                <span class="icon">📡</span>
+                <strong>Log da sessão</strong>
+                <span>Histórico completo de todas as requisições realizadas</span>
+            </div>
+        </div>
     </div>
-</header>
+</div>
+
+<!-- ═══ DEMO BANNER ═══ -->
+<div class="demo-banner">
+    🧪 Modo Demonstração — banco de dados simulado no navegador &nbsp;·&nbsp;
+    Para usar com a API real: <code>uvicorn main:app --reload</code> na porta 8000
+</div>
+
+<!-- ═══ STICKY NAV ═══ -->
+<nav class="sticky-nav">
+    <div class="sticky-nav-inner">
+        <span class="nav-logo">CRUD Lab</span>
+        <a href="#section-teoria"  class="nav-link">📖 Teoria</a>
+        <a href="#section-db"      class="nav-link nl-db"><div class="nav-dot nd-db"></div>Banco</a>
+        <a href="#section-post"    class="nav-link nl-post"><div class="nav-dot nd-post"></div>POST</a>
+        <a href="#section-get"     class="nav-link nl-get"><div class="nav-dot nd-get"></div>GET</a>
+        <a href="#section-put"     class="nav-link nl-put"><div class="nav-dot nd-put"></div>PUT</a>
+        <a href="#section-delete"  class="nav-link nl-del"><div class="nav-dot nd-delete"></div>DELETE</a>
+        <a href="#section-log"     class="nav-link">📡 Log</a>
+    </div>
+</nav>
 
 <div class="container">
 
-    <!-- ═══════════ TEORIA ═══════════ -->
-    <div class="card section-mb">
-        <div class="card-header">
-            <span class="badge badge-info">Teoria</span>
-            <strong>O que é CRUD?</strong>
+<!-- ═══ TEORIA ═══ -->
+<div class="card section-mb" id="section-teoria">
+    <div class="card-header">
+        <span class="badge badge-info">Teoria</span>
+        <strong>O que é CRUD? Como funciona?</strong>
+    </div>
+    <div class="card-body">
+        <p style="font-size:.875rem; color:var(--muted); max-width:760px">
+            <strong style="color:var(--text); font-family:var(--font-head)">CRUD</strong> é o acrônimo das quatro operações fundamentais de persistência de dados:
+            <strong>C</strong>reate · <strong>R</strong>ead · <strong>U</strong>pdate · <strong>D</strong>elete.
+            Em APIs REST, cada operação usa um <strong>método HTTP</strong> diferente — experimente cada seção abaixo e observe a requisição e resposta em tempo real.
+        </p>
+        <div class="method-cards">
+            <div class="mc mc-post-card">
+                <div class="mc-top"><span class="badge badge-post">Create</span><span class="mc-verb">POST /pessoas/</span></div>
+                <h4>Criar registro</h4>
+                <p>Envia dados no <strong>corpo (body)</strong> em JSON. O servidor valida e persiste.</p>
+                <div class="mc-status"><span class="pill pill-green">201 Created</span></div>
+            </div>
+            <div class="mc mc-get-card">
+                <div class="mc-top"><span class="badge badge-get">Read</span><span class="mc-verb">GET /pessoas/</span></div>
+                <h4>Ler registros</h4>
+                <p>Sem corpo na requisição. O servidor devolve dados. Operação <strong>segura e idempotente</strong>.</p>
+                <div class="mc-status"><span class="pill pill-blue">200 OK</span></div>
+            </div>
+            <div class="mc mc-put-card">
+                <div class="mc-top"><span class="badge badge-put">Update</span><span class="mc-verb">PUT /pessoas/{cpf}</span></div>
+                <h4>Atualizar registro</h4>
+                <p>Substitui <strong>completamente</strong> o recurso. Todos os campos devem ser enviados.</p>
+                <div class="mc-status"><span class="pill pill-blue">200 OK</span></div>
+            </div>
+            <div class="mc mc-del-card">
+                <div class="mc-top"><span class="badge badge-delete">Delete</span><span class="mc-verb">DELETE /pessoas/{cpf}</span></div>
+                <h4>Remover registro</h4>
+                <p>Remove permanentemente. Sem corpo — só o identificador na <strong>URL</strong>.</p>
+                <div class="mc-status"><span class="pill pill-blue">200 OK</span></div>
+            </div>
         </div>
-        <div class="card-body theory">
-            <p>
-                <strong>CRUD</strong> é o acrônimo das quatro operações fundamentais de persistência de dados:
-                <strong>C</strong>reate · <strong>R</strong>ead · <strong>U</strong>pdate · <strong>D</strong>elete.
-                Em APIs REST cada operação mapeia para um método HTTP com semântica bem definida.
-            </p>
-            <table class="tbl">
-                <thead>
-                    <tr>
-                        <th>Operação</th>
-                        <th>Método HTTP</th>
-                        <th>Endpoint</th>
-                        <th>Status de sucesso</th>
-                        <th>O que faz</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="badge badge-post">Create</span></td>
-                        <td><code>POST</code></td>
-                        <td><code>POST /pessoas/</code></td>
-                        <td><span class="pill pill-green">201 Created</span></td>
-                        <td>Envia dados no corpo (JSON) para criar um novo recurso</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-get">Read</span></td>
-                        <td><code>GET</code></td>
-                        <td><code>GET /pessoas/</code> · <code>GET /pessoas/{cpf}</code></td>
-                        <td><span class="pill pill-blue">200 OK</span></td>
-                        <td>Lê dados sem modificar nada no servidor — idempotente e seguro</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-put">Update</span></td>
-                        <td><code>PUT</code></td>
-                        <td><code>PUT /pessoas/{cpf}</code></td>
-                        <td><span class="pill pill-blue">200 OK</span></td>
-                        <td>Substitui <em>completamente</em> o recurso existente pelo novo corpo</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-delete">Delete</span></td>
-                        <td><code>DELETE</code></td>
-                        <td><code>DELETE /pessoas/{cpf}</code></td>
-                        <td><span class="pill pill-blue">200 OK</span></td>
-                        <td>Remove permanentemente o recurso — sem corpo na requisição</td>
-                    </tr>
+        <p style="font-size:.75rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.4rem; font-family:var(--font-head)">Códigos de status HTTP comuns</p>
+        <div style="display:flex; flex-wrap:wrap; gap:.4rem">
+            <span class="pill pill-green">200 OK</span>
+            <span class="pill pill-green">201 Created</span>
+            <span class="pill pill-orange">400 Bad Request</span>
+            <span class="pill pill-red">404 Not Found</span>
+            <span class="pill pill-red">409 Conflict</span>
+            <span class="pill pill-orange">422 Unprocessable</span>
+            <span class="pill pill-red">500 Server Error</span>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ BANCO ═══ -->
+<div class="card section-mb" id="section-db">
+    <div class="card-header" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:.5rem">
+            <span>🗄️</span><strong>Estado Atual do Banco de Dados</strong>
+            <span style="font-size:.74rem;color:var(--muted);font-weight:400">— atualiza automaticamente após cada operação</span>
+        </div>
+        <button class="btn btn-outline" onclick="listarPessoas()">↻ Atualizar</button>
+    </div>
+    <div style="padding:0">
+        <div class="db-table-wrap">
+            <table class="db-table">
+                <thead><tr><th>Nome Completo</th><th>CPF</th><th>Nascimento</th><th>Endereço</th><th>Estado Civil</th></tr></thead>
+                <tbody id="db-tbody">
+                    <tr><td colspan="5"><div class="empty-state">
+                        <div class="ico">📭</div>
+                        <p>Nenhum registro ainda. Use o formulário <strong>POST</strong> abaixo para criar o primeiro!</p>
+                    </div></td></tr>
                 </tbody>
             </table>
-
-            <div style="margin-top:1rem; display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;">
-                <strong style="font-size:.82rem; color:var(--muted)">Códigos HTTP relevantes:</strong>
-                <span class="pill pill-green">200 OK</span>
-                <span class="pill pill-green">201 Created</span>
-                <span class="pill pill-orange">400 Bad Request</span>
-                <span class="pill pill-red">404 Not Found</span>
-                <span class="pill pill-red">409 Conflict</span>
-                <span class="pill pill-orange">422 Unprocessable Entity</span>
-                <span class="pill pill-red">500 Server Error</span>
-            </div>
         </div>
     </div>
+    <div class="db-meta">ℹ️ Banco <strong>em memória</strong> — os dados são perdidos ao recarregar a página. Em produção, usaria-se um banco persistente como <strong>PostgreSQL</strong> ou <strong>MySQL</strong>.</div>
+</div>
 
-    <!-- ═══════════ BANCO DE DADOS ═══════════ -->
-    <div class="card section-mb">
-        <div class="db-header">
-            <span>🗄️</span>
-            <h3>Banco de Dados — Estado Atual</h3>
-            <button class="btn btn-outline" onclick="listarPessoas()">↻ Atualizar</button>
-        </div>
-        <div class="card-body" style="padding:0">
-            <div class="db-table-wrap">
-                <table class="db-table">
-                    <thead>
-                        <tr>
-                            <th>Nome Completo</th>
-                            <th>CPF</th>
-                            <th>Data de Nascimento</th>
-                            <th>Endereço</th>
-                            <th>Estado Civil</th>
-                        </tr>
-                    </thead>
-                    <tbody id="db-tbody">
-                        <tr><td colspan="5">
-                            <div class="empty-state">
-                                <div class="ico">📭</div>
-                                <p>Nenhum registro cadastrado. Use o formulário POST abaixo para começar!</p>
-                            </div>
-                        </td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div style="padding:.6rem 1.25rem; border-top:1px solid var(--border); font-size:.75rem; color:var(--muted);">
-            ℹ️ Este é um banco de dados <strong>em memória</strong> — os dados são perdidos ao reiniciar o servidor. Em produção, usaria-se um banco relacional (PostgreSQL, MySQL) ou NoSQL (MongoDB).
-        </div>
+<!-- ═══ POST ═══ -->
+<div class="section-mb" id="section-post">
+    <div class="section-head">
+        <div class="step-num sn-post">1</div>
+        <div><h2>Create — Criar um novo registro</h2><span class="desc">Método POST · Endpoint <code>/pessoas/</code></span></div>
     </div>
-
-    <!-- ═══════════ POST + GET ═══════════ -->
-    <div class="grid-2 section-mb">
-
-        <!-- POST -->
+    <div class="crud-grid">
         <div class="card card-post">
             <div class="card-header">
                 <span class="badge badge-post">POST</span>
-                <span class="endpoint">/pessoas/</span>
-                <strong>Criar Pessoa</strong>
+                <strong>Formulário de Criação</strong>
+                <span class="endpoint" style="margin-left:auto">/pessoas/</span>
             </div>
             <div class="card-body">
                 <div class="edu-note">
-                    <strong>📚 CREATE — Como funciona?</strong>
-                    O método <strong>POST</strong> envia um <em>corpo (body)</em> no formato JSON com os dados da nova pessoa.
-                    O servidor valida, persiste e retorna <code>201 Created</code>.
+                    <strong>📚 Como funciona o CREATE?</strong>
+                    O método <strong>POST</strong> envia os dados no <em>corpo (body)</em> da requisição em formato <strong>JSON</strong>.
+                    O servidor valida cada campo e, se tudo estiver correto, persiste no banco e retorna <code>201 Created</code>.
                     Se o CPF já existir, retorna <code>409 Conflict</code>.
-                    O CPF é validado pelo algoritmo oficial dos dígitos verificadores.
+                    <br><br>✨ <em>Observe ao lado como o JSON é montado em tempo real enquanto você preenche!</em>
                 </div>
-
-                <div class="form-group">
-                    <label>Nome Completo</label>
-                    <input id="p-nome" type="text" placeholder="Ex: João da Silva" />
+                <div class="form-group"><label>Nome Completo</label><input id="p-nome" type="text" placeholder="Ex: João da Silva" oninput="previewPost()"/></div>
+                <div class="grid-2">
+                    <div class="form-group"><label>CPF</label><input id="p-cpf" type="text" placeholder="123.456.789-09" oninput="previewPost()"/></div>
+                    <div class="form-group"><label>Data de Nascimento</label><input id="p-data" type="date" oninput="previewPost()"/></div>
                 </div>
-                <div class="grid-2 gap-sm">
-                    <div class="form-group">
-                        <label>CPF</label>
-                        <input id="p-cpf" type="text" placeholder="123.456.789-09" />
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Nascimento</label>
-                        <input id="p-data" type="date" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Endereço</label>
-                    <input id="p-end" type="text" placeholder="Rua das Flores, 123, São Paulo - SP" />
-                </div>
-                <div class="form-group">
-                    <label>Estado Civil</label>
-                    <select id="p-estado">
+                <div class="form-group"><label>Endereço</label><input id="p-end" type="text" placeholder="Rua das Flores, 123, São Paulo — SP" oninput="previewPost()"/></div>
+                <div class="form-group"><label>Estado Civil</label>
+                    <select id="p-estado" onchange="previewPost()">
                         <option value="">Selecione...</option>
                         <option>solteiro</option><option>solteira</option>
                         <option>casado</option><option>casada</option>
@@ -415,94 +649,82 @@
                         <option>união estável</option>
                     </select>
                 </div>
-
-                <button class="btn btn-post" onclick="criarPessoa()">＋ Cadastrar Pessoa</button>
-                <div class="response-box" id="r-post"></div>
+                <button class="btn btn-post" onclick="criarPessoa()">＋ Enviar Requisição POST</button>
             </div>
         </div>
-
-        <!-- GET -->
-        <div class="card card-get">
-            <div class="card-header">
-                <span class="badge badge-get">GET</span>
-                <span class="endpoint">/pessoas/{cpf}</span>
-                <strong>Buscar Pessoa</strong>
-            </div>
-            <div class="card-body">
-                <div class="edu-note">
-                    <strong>📚 READ por ID — Como funciona?</strong>
-                    O método <strong>GET</strong> é somente leitura — nunca altera dados.
-                    O identificador (CPF) vai diretamente na <strong>URL</strong>, não no corpo.
-                    Retorna <code>200 OK</code> com os dados ou <code>404 Not Found</code> se inexistente.
-                    Aceita CPF com ou sem formatação.
-                </div>
-
-                <div class="form-group">
-                    <label>CPF para buscar</label>
-                    <input id="g-cpf" type="text" placeholder="123.456.789-09 ou 12345678909" />
-                </div>
-                <button class="btn btn-get" onclick="buscarPessoa()" style="margin-bottom:.75rem">🔍 Buscar por CPF</button>
-                <div class="response-box" id="r-get"></div>
-
-                <div class="divider"></div>
-
-                <div class="edu-note">
-                    <strong>📚 READ todos — GET sem parâmetro</strong>
-                    Quando o GET é feito na rota base <code>/pessoas/</code>, o servidor retorna
-                    <em>todos</em> os registros em um array JSON. Útil para listar e popular tabelas.
-                </div>
-                <button class="btn btn-get" onclick="listarPessoas()">📋 Listar Todas</button>
-                <div class="response-box" id="r-list"></div>
-            </div>
+        <div class="inspector">
+            <div class="inspector-label">📤 Requisição HTTP — atualiza conforme você preenche</div>
+            <div class="http-panel"><div class="http-panel-header req-header"><div class="dot"></div>REQUEST</div><div class="http-code" id="req-preview-post"><span class="c-placeholder">← Preencha o formulário ao lado para ver a requisição sendo montada...</span></div></div>
+            <div class="http-panel" id="res-post-panel" style="display:none"><div class="http-panel-header" id="res-post-header"></div><div class="http-code" id="res-post-body"></div></div>
         </div>
-
     </div>
+</div>
 
-    <!-- ═══════════ PUT + DELETE ═══════════ -->
-    <div class="grid-2 section-mb">
-
-        <!-- PUT -->
-        <div class="card card-put">
-            <div class="card-header">
-                <span class="badge badge-put">PUT</span>
-                <span class="endpoint">/pessoas/{cpf}</span>
-                <strong>Atualizar Pessoa</strong>
+<!-- ═══ GET ═══ -->
+<div class="section-mb" id="section-get">
+    <div class="section-head">
+        <div class="step-num sn-get">2</div>
+        <div><h2>Read — Consultar registros</h2><span class="desc">Método GET · Endpoints <code>/pessoas/</code> e <code>/pessoas/{cpf}</code></span></div>
+    </div>
+    <div class="crud-grid">
+        <div style="display:flex;flex-direction:column;gap:1rem">
+            <div class="card card-get">
+                <div class="card-header"><span class="badge badge-get">GET</span><strong>Buscar por CPF</strong><span class="endpoint" style="margin-left:auto">/pessoas/{cpf}</span></div>
+                <div class="card-body">
+                    <div class="edu-note">
+                        <strong>📚 READ por ID — Como funciona?</strong>
+                        No GET, <strong>nunca há corpo</strong> na requisição. O identificador (CPF) vai direto na <strong>URL</strong> como parâmetro de rota.
+                        Retorna <code>200 OK</code> com os dados ou <code>404 Not Found</code> se o CPF não existir.
+                    </div>
+                    <div class="form-group"><label>CPF para buscar</label><input id="g-cpf" type="text" placeholder="123.456.789-09 ou 12345678909" oninput="previewGet()"/></div>
+                    <button class="btn btn-get" onclick="buscarPessoa()">🔍 Enviar Requisição GET</button>
+                </div>
             </div>
+            <div class="card card-get">
+                <div class="card-header"><span class="badge badge-get">GET</span><strong>Listar Todos</strong><span class="endpoint" style="margin-left:auto">/pessoas/</span></div>
+                <div class="card-body">
+                    <div class="edu-note">
+                        <strong>📚 READ lista — GET sem parâmetro</strong>
+                        O GET na rota base <code>/pessoas/</code> devolve <em>todos</em> os registros como um <strong>array JSON</strong>.
+                        Nenhum parâmetro ou corpo — só a URL.
+                    </div>
+                    <button class="btn btn-get" onclick="listarTodasAPI()">📋 Enviar GET /pessoas/</button>
+                </div>
+            </div>
+        </div>
+        <div class="inspector">
+            <div class="inspector-label">📤 Requisição HTTP</div>
+            <div class="http-panel"><div class="http-panel-header req-header"><div class="dot"></div>REQUEST</div><div class="http-code" id="req-preview-get"><span class="c-placeholder">← Digite um CPF ou clique em "Listar Todos"...</span></div></div>
+            <div class="http-panel" id="res-get-panel" style="display:none"><div class="http-panel-header" id="res-get-header"></div><div class="http-code" id="res-get-body"></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ PUT ═══ -->
+<div class="section-mb" id="section-put">
+    <div class="section-head">
+        <div class="step-num sn-put">3</div>
+        <div><h2>Update — Atualizar um registro</h2><span class="desc">Método PUT · Endpoint <code>/pessoas/{cpf}</code></span></div>
+    </div>
+    <div class="crud-grid">
+        <div class="card card-put">
+            <div class="card-header"><span class="badge badge-put">PUT</span><strong>Formulário de Atualização</strong><span class="endpoint" style="margin-left:auto">/pessoas/{cpf}</span></div>
             <div class="card-body">
                 <div class="edu-note">
-                    <strong>📚 UPDATE — Como funciona?</strong>
-                    O <strong>PUT</strong> substitui <em>completamente</em> um recurso.
-                    Todos os campos devem ser enviados mesmo que apenas um mude.
-                    O CPF da URL identifica <em>qual</em> recurso atualizar;
-                    o CPF do corpo é o novo valor (pode ser igual ou diferente).
-                    Diferença para PATCH: PATCH atualiza <em>parcialmente</em>.
+                    <strong>📚 Como funciona o UPDATE?</strong>
+                    O <strong>PUT</strong> faz substituição <em>completa</em> do recurso. O CPF na <strong>URL</strong> identifica <em>qual</em> registro substituir;
+                    o <strong>corpo JSON</strong> contém os novos valores — todos os campos são obrigatórios.
+                    <br><br>💡 <code>PATCH</code> (não implementado aqui) atualizaria apenas os campos enviados.
                 </div>
-
-                <div class="form-group">
-                    <label>CPF na URL <span style="color:var(--put)">(quem será atualizado)</span></label>
-                    <input id="u-cpf-url" type="text" placeholder="CPF atual da pessoa" />
+                <div class="form-group"><label>CPF na URL <span style="color:var(--put);font-weight:700">(identifica quem será atualizado)</span></label><input id="u-cpf-url" type="text" placeholder="CPF atual da pessoa" oninput="previewPut()"/></div>
+                <div class="form-group"><label>Novo Nome Completo</label><input id="u-nome" type="text" placeholder="Ex: João da Silva Júnior" oninput="previewPut()"/></div>
+                <div class="grid-2">
+                    <div class="form-group"><label>CPF (no corpo)</label><input id="u-cpf-body" type="text" placeholder="Mesmo ou novo CPF" oninput="previewPut()"/></div>
+                    <div class="form-group"><label>Data de Nascimento</label><input id="u-data" type="date" oninput="previewPut()"/></div>
                 </div>
-                <div class="form-group">
-                    <label>Novo Nome Completo</label>
-                    <input id="u-nome" type="text" placeholder="Ex: João da Silva Júnior" />
-                </div>
-                <div class="grid-2 gap-sm">
-                    <div class="form-group">
-                        <label>CPF (corpo)</label>
-                        <input id="u-cpf-body" type="text" placeholder="Mesmo ou novo CPF" />
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Nascimento</label>
-                        <input id="u-data" type="date" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Novo Endereço</label>
-                    <input id="u-end" type="text" placeholder="Novo endereço completo" />
-                </div>
-                <div class="form-group">
-                    <label>Estado Civil</label>
-                    <select id="u-estado">
+                <div class="form-group"><label>Novo Endereço</label><input id="u-end" type="text" placeholder="Novo endereço completo" oninput="previewPut()"/></div>
+                <div class="form-group"><label>Estado Civil</label>
+                    <select id="u-estado" onchange="previewPut()">
                         <option value="">Selecione...</option>
                         <option>solteiro</option><option>solteira</option>
                         <option>casado</option><option>casada</option>
@@ -512,205 +734,414 @@
                         <option>união estável</option>
                     </select>
                 </div>
-                <button class="btn btn-put" onclick="atualizarPessoa()">✏️ Atualizar Pessoa</button>
-                <div class="response-box" id="r-put"></div>
+                <button class="btn btn-put" onclick="atualizarPessoa()">✏️ Enviar Requisição PUT</button>
             </div>
         </div>
+        <div class="inspector">
+            <div class="inspector-label">📤 Requisição HTTP — atualiza conforme você preenche</div>
+            <div class="http-panel"><div class="http-panel-header req-header"><div class="dot"></div>REQUEST</div><div class="http-code" id="req-preview-put"><span class="c-placeholder">← Preencha o formulário ao lado para ver a requisição...</span></div></div>
+            <div class="http-panel" id="res-put-panel" style="display:none"><div class="http-panel-header" id="res-put-header"></div><div class="http-code" id="res-put-body"></div></div>
+        </div>
+    </div>
+</div>
 
-        <!-- DELETE -->
+<!-- ═══ DELETE ═══ -->
+<div class="section-mb" id="section-delete">
+    <div class="section-head">
+        <div class="step-num sn-delete">4</div>
+        <div><h2>Delete — Remover um registro</h2><span class="desc">Método DELETE · Endpoint <code>/pessoas/{cpf}</code></span></div>
+    </div>
+    <div class="crud-grid">
         <div class="card card-delete">
-            <div class="card-header">
-                <span class="badge badge-delete">DELETE</span>
-                <span class="endpoint">/pessoas/{cpf}</span>
-                <strong>Excluir Pessoa</strong>
-            </div>
+            <div class="card-header"><span class="badge badge-delete">DELETE</span><strong>Formulário de Remoção</strong><span class="endpoint" style="margin-left:auto">/pessoas/{cpf}</span></div>
             <div class="card-body">
                 <div class="edu-note">
-                    <strong>📚 DELETE — Como funciona?</strong>
+                    <strong>📚 Como funciona o DELETE?</strong>
                     O método <strong>DELETE</strong> remove o recurso permanentemente.
-                    Não há corpo na requisição — apenas o CPF na URL identifica o alvo.
-                    Retorna <code>200 OK</code> se removido ou <code>404</code> se não encontrado.
-                    Em produção, geralmente exige autenticação e autorização.
+                    <strong>Não há corpo</strong> na requisição — apenas o CPF na <strong>URL</strong> identifica o alvo.
+                    Retorna <code>200 OK</code> se removido, ou <code>404 Not Found</code> se o CPF não existir.
+                    <br><br>🔒 Em sistemas reais, costuma exigir autenticação e confirmação do usuário.
                 </div>
-
-                <div class="form-group">
-                    <label>CPF para excluir</label>
-                    <input id="d-cpf" type="text" placeholder="123.456.789-09" />
-                </div>
-                <button class="btn btn-delete" onclick="excluirPessoa()">🗑️ Excluir Pessoa</button>
-                <div class="response-box" id="r-delete"></div>
-
+                <div class="form-group"><label>CPF para excluir</label><input id="d-cpf" type="text" placeholder="123.456.789-09" oninput="previewDelete()"/></div>
+                <button class="btn btn-delete" onclick="excluirPessoa()">🗑️ Enviar Requisição DELETE</button>
                 <div class="warn-box">
                     <strong>⚠️ Atenção!</strong> Em sistemas reais, um DELETE costuma ser irreversível.
-                    Estratégias comuns: exigir confirmação, usar <em>soft delete</em> (campo
-                    <code>ativo = false</code>), ou manter histórico em tabela de auditoria.
+                    Estratégias comuns: <em>soft delete</em> (campo <code>ativo = false</code>) ou tabela de auditoria.
                 </div>
             </div>
         </div>
-
-    </div>
-
-    <!-- ═══════════ LOG ═══════════ -->
-    <div class="card section-mb">
-        <div class="card-header">
-            <span>📡</span>
-            <strong>Log de Requisições HTTP</strong>
-            <button class="btn btn-outline" onclick="limparLog()" style="margin-left:auto">✕ Limpar</button>
-        </div>
-        <div class="card-body">
-            <p style="font-size:.82rem; color:var(--muted); margin-bottom:.75rem;">
-                Cada ação nos formulários acima dispara uma requisição HTTP real para esta API.
-                Observe método, URL, status code e tempo de resposta — os mesmos dados que você veria no DevTools do navegador (aba Network).
-            </p>
-            <div class="log-wrap" id="log">
-                <div class="log-empty">Aguardando requisições… Interaja com os formulários acima.</div>
-            </div>
+        <div class="inspector">
+            <div class="inspector-label">📤 Requisição HTTP — sem corpo (só a URL)</div>
+            <div class="http-panel"><div class="http-panel-header req-header"><div class="dot"></div>REQUEST</div><div class="http-code" id="req-preview-del"><span class="c-placeholder">← Digite um CPF para ver a requisição sendo montada...</span></div></div>
+            <div class="http-panel" id="res-del-panel" style="display:none"><div class="http-panel-header" id="res-del-header"></div><div class="http-code" id="res-del-body"></div></div>
         </div>
     </div>
+</div>
+
+<!-- ═══ LOG ═══ -->
+<div class="card section-mb" id="section-log">
+    <div class="card-header" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:.5rem">
+            <span>📡</span><strong>Histórico de Requisições da Sessão</strong>
+            <span style="font-size:.74rem;color:var(--muted);font-weight:400">— como a aba Network do DevTools (F12)</span>
+        </div>
+        <button class="btn btn-outline" onclick="limparLog()">✕ Limpar</button>
+    </div>
+    <div class="card-body">
+        <p style="font-size:.82rem; color:var(--muted); margin-bottom:.85rem">
+            Cada ação nos formulários acima simula uma requisição HTTP completa.
+            Aqui você acompanha método, URL, status code e tempo de resposta.
+            Para operações com body (POST/PUT), o JSON enviado aparece na linha abaixo.
+        </p>
+        <div class="log-wrap" id="log"><div class="log-empty">Aguardando requisições… Interaja com os formulários acima para começar.</div></div>
+    </div>
+</div>
 
 </div><!-- /container -->
+
+<footer>
+    <div class="footer-logo">CRUD Lab</div>
+    <p>Ferramenta educacional para aprendizado de CRUD com API REST &nbsp;·&nbsp; FastAPI · Python · Vanilla JS</p>
+</footer>
 
 <script>
 "use strict";
 
-// ── Helpers ──────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+//  MOCK API — simula o backend FastAPI no navegador
+//  Usada quando não há servidor local rodando (ex: Vercel)
+// ═══════════════════════════════════════════════════════════════════
 
-function statusClass(s) {
-    return s >= 500 ? 'res-5xx' : s >= 400 ? 'res-4xx' : 'res-2xx';
+let mockDB = [];
+
+function normalizeCPF(cpf) {
+    const d = cpf.replace(/\D/g, '');
+    if (d.length === 11) return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`;
+    return cpf;
 }
 
-function statusText(s) {
-    return ({200:'OK',201:'Created',400:'Bad Request',404:'Not Found',
-             409:'Conflict',422:'Unprocessable Entity',500:'Internal Server Error'})[s] ?? '';
+function validarCPF(cpf) {
+    const d = cpf.replace(/\D/g, '');
+    if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false;
+    let s = 0;
+    for (let i = 0; i < 9; i++) s += +d[i] * (10 - i);
+    let r = (s * 10) % 11; if (r >= 10) r = 0;
+    if (r !== +d[9]) return false;
+    s = 0;
+    for (let i = 0; i < 10; i++) s += +d[i] * (11 - i);
+    r = (s * 10) % 11; if (r >= 10) r = 0;
+    return r === +d[10];
 }
 
-function showResponse(id, status, data) {
-    const el = document.getElementById(id);
-    el.innerHTML =
-        `<span class="res-status ${statusClass(status)}">${status} ${statusText(status)}</span>` +
-        `<div class="res-body">${JSON.stringify(data, null, 2)}</div>`;
-    el.classList.add('show');
+const ESTADOS_VALIDOS = ['solteiro','solteira','casado','casada','divorciado','divorciada','viúvo','viúva','separado','separada','união estável'];
+
+function validarPessoa(p) {
+    const errs = [];
+    const nome = (p.nome_completo ?? '').trim();
+    if (nome.length < 3 || nome.length > 150)
+        errs.push({ loc: ['body','nome_completo'], msg: 'Nome deve ter entre 3 e 150 caracteres', type: 'value_error' });
+    if (!p.cpf || !validarCPF(p.cpf))
+        errs.push({ loc: ['body','cpf'], msg: 'CPF inválido — verifique os dígitos verificadores', type: 'value_error' });
+    if (!p.data_nascimento)
+        errs.push({ loc: ['body','data_nascimento'], msg: 'Campo obrigatório', type: 'missing' });
+    else if (new Date(p.data_nascimento + 'T00:00:00') >= new Date())
+        errs.push({ loc: ['body','data_nascimento'], msg: 'Data de nascimento deve ser no passado', type: 'value_error' });
+    const end = (p.endereco ?? '').trim();
+    if (end.length < 5)
+        errs.push({ loc: ['body','endereco'], msg: 'Endereço deve ter pelo menos 5 caracteres', type: 'value_error' });
+    if (!p.estado_civil || !ESTADOS_VALIDOS.includes(p.estado_civil.toLowerCase()))
+        errs.push({ loc: ['body','estado_civil'], msg: 'Estado civil inválido ou não selecionado', type: 'value_error' });
+    return errs;
 }
 
-function addLog(method, path, status, ms) {
+function cpfFromPath(path) {
+    return normalizeCPF(decodeURIComponent(path.slice('/pessoas/'.length)));
+}
+
+function mockHandler(method, path, body) {
+    // POST /pessoas/
+    if (method === 'POST' && path === '/pessoas/') {
+        const errs = validarPessoa(body ?? {});
+        if (errs.length) return { status: 422, data: { detail: errs } };
+        const normalized = {
+            nome_completo:   (body.nome_completo ?? '').trim(),
+            cpf:             normalizeCPF(body.cpf),
+            data_nascimento: body.data_nascimento,
+            endereco:        (body.endereco ?? '').trim(),
+            estado_civil:    (body.estado_civil ?? '').toLowerCase(),
+        };
+        if (mockDB.find(p => p.cpf === normalized.cpf))
+            return { status: 409, data: { detail: 'Já existe uma pessoa cadastrada com este CPF.' } };
+        mockDB.push(normalized);
+        return { status: 201, data: { msg: 'Pessoa cadastrada com sucesso!' } };
+    }
+
+    // GET /pessoas/
+    if (method === 'GET' && path === '/pessoas/')
+        return { status: 200, data: [...mockDB] };
+
+    // GET /pessoas/{cpf}
+    if (method === 'GET' && path.startsWith('/pessoas/') && path.length > '/pessoas/'.length) {
+        const cpf = cpfFromPath(path);
+        const p = mockDB.find(p => p.cpf === cpf);
+        return p
+            ? { status: 200, data: p }
+            : { status: 404, data: { detail: 'Pessoa não encontrada.' } };
+    }
+
+    // PUT /pessoas/{cpf}
+    if (method === 'PUT' && path.startsWith('/pessoas/') && path.length > '/pessoas/'.length) {
+        const cpf = cpfFromPath(path);
+        const idx = mockDB.findIndex(p => p.cpf === cpf);
+        if (idx === -1) return { status: 404, data: { detail: 'Pessoa não encontrada.' } };
+        const errs = validarPessoa(body ?? {});
+        if (errs.length) return { status: 422, data: { detail: errs } };
+        mockDB[idx] = {
+            nome_completo:   (body.nome_completo ?? '').trim(),
+            cpf:             normalizeCPF(body.cpf),
+            data_nascimento: body.data_nascimento,
+            endereco:        (body.endereco ?? '').trim(),
+            estado_civil:    (body.estado_civil ?? '').toLowerCase(),
+        };
+        return { status: 200, data: { msg: 'Pessoa atualizada com sucesso!' } };
+    }
+
+    // DELETE /pessoas/{cpf}
+    if (method === 'DELETE' && path.startsWith('/pessoas/') && path.length > '/pessoas/'.length) {
+        const cpf = cpfFromPath(path);
+        const idx = mockDB.findIndex(p => p.cpf === cpf);
+        if (idx === -1) return { status: 404, data: { detail: 'Pessoa não encontrada.' } };
+        mockDB.splice(idx, 1);
+        return { status: 200, data: { msg: 'Pessoa excluída com sucesso!' } };
+    }
+
+    return { status: 404, data: { detail: 'Rota não encontrada.' } };
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  DETECÇÃO: API real (uvicorn :8000) ou mock (Vercel / Live Server)
+// ═══════════════════════════════════════════════════════════════════
+const USE_REAL_API =
+    (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') &&
+    window.location.port === '8000';
+
+// ═══════════════════════════════════════════════════════════════════
+//  EXPLICAÇÕES DIDÁTICAS DE ERRO
+// ═══════════════════════════════════════════════════════════════════
+const ERROR_EXPLAIN = {
+    400: { icon: '🔍', title: 'Requisição mal-formada',
+           msg: 'O servidor não conseguiu interpretar a requisição. Verifique se todos os campos estão preenchidos e em formato correto.' },
+    404: { icon: '🔎', title: 'Registro não encontrado',
+           msg: 'O CPF informado não existe no banco de dados. Verifique se digitou corretamente ou se o registro foi criado antes de tentar acessá-lo.' },
+    409: { icon: '🔁', title: 'Conflito — dado duplicado',
+           msg: 'Já existe um registro com esse CPF. Cada pessoa deve ter um CPF único. Use um CPF diferente ou utilize o <strong>PUT</strong> para atualizar o registro existente.' },
+    422: { icon: '❌', title: 'Dados inválidos — não processável',
+           msg: 'O servidor entendeu a requisição, mas os dados não passaram na validação. Causas comuns: <code>CPF</code> com dígitos verificadores incorretos, <code>data_nascimento</code> no futuro, <code>estado_civil</code> com valor não reconhecido, ou campo obrigatório vazio.' },
+    500: { icon: '🔥', title: 'Erro interno no servidor',
+           msg: 'Algo deu errado no processamento interno — não é um problema com os dados enviados. Verifique se o servidor está rodando e tente novamente.' },
+};
+
+// ═══════════════════════════════════════════════════════════════════
+//  UTILITÁRIOS DE EXIBIÇÃO
+// ═══════════════════════════════════════════════════════════════════
+function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function highlightJson(obj) {
+    return JSON.stringify(obj, null, 2).replace(
+        /("(\\u[\dA-Fa-f]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        m => {
+            if (/^"/.test(m))
+                return /:$/.test(m) ? `<span class="c-jkey">${esc(m)}</span>` : `<span class="c-jstr">${esc(m)}</span>`;
+            return `<span class="c-jnum">${esc(m)}</span>`;
+        }
+    );
+}
+
+function buildReqHtml(method, path, body) {
+    const mc = { POST:'c-method-post', GET:'c-method-get', PUT:'c-method-put', DELETE:'c-method-del' }[method] ?? '';
+    const host = USE_REAL_API ? window.location.host : '127.0.0.1:8000';
+    let h = `<span class="${mc}">${method}</span> <span class="c-url">${esc(path)} HTTP/1.1</span>\n`;
+    h += `<span class="c-hkey">Host:</span> <span class="c-hval">${esc(host)}</span>\n`;
+    if (body !== undefined) h += `<span class="c-hkey">Content-Type:</span> <span class="c-hval">application/json</span>\n`;
+    h += '\n';
+    h += body !== undefined ? highlightJson(body) : `<span class="c-placeholder">(sem corpo — GET e DELETE não enviam body)</span>`;
+    return h;
+}
+
+function buildResHtml(status, data) {
+    const label = { 200:'OK', 201:'Created', 400:'Bad Request', 404:'Not Found', 409:'Conflict', 422:'Unprocessable Entity', 500:'Internal Server Error' }[status] ?? '';
+    const cls = status >= 400 ? 'ler' : 'lok';
+    return `<span class="${cls}">HTTP/1.1 ${status} ${label}</span>\n`
+         + `<span class="c-hkey">Content-Type:</span> <span class="c-hval">application/json</span>\n\n`
+         + highlightJson(data);
+}
+
+function showResponse(panelId, headerId, bodyId, status, data) {
+    const panel  = document.getElementById(panelId);
+    const header = document.getElementById(headerId);
+    const body   = document.getElementById(bodyId);
+    const ok = status < 400;
+    header.className = 'http-panel-header ' + (ok ? 'res-header-ok' : 'res-header-err');
+    header.innerHTML = `<div class="dot"></div>RESPONSE &nbsp; ${status} ${ok ? '✓' : '✗'}`;
+    body.innerHTML = buildResHtml(status, data);
+    panel.style.display = 'block';
+    panel.classList.remove('fade-in');
+    void panel.offsetWidth;
+    panel.classList.add('fade-in');
+
+    const explainId = panelId + '-explain';
+    document.getElementById(explainId)?.remove();
+    if (!ok && ERROR_EXPLAIN[status]) {
+        const e = ERROR_EXPLAIN[status];
+        const box = document.createElement('div');
+        box.id = explainId;
+        box.className = 'error-explain';
+        box.innerHTML = `<div class="ee-top">${e.icon} ${e.title} <span class="ee-code">${status}</span></div><p>${e.msg}</p>`;
+        panel.insertAdjacentElement('afterend', box);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  API DISPATCHER
+// ═══════════════════════════════════════════════════════════════════
+async function api(method, path, body) {
+    const t0 = Date.now();
+    let result;
+    if (USE_REAL_API) {
+        const res = await fetch(path, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+        });
+        let data; try { data = await res.json(); } catch { data = {}; }
+        result = { status: res.status, data };
+    } else {
+        await new Promise(r => setTimeout(r, 30 + Math.random() * 80));
+        result = mockHandler(method, path, body);
+    }
+    addLog(method, path, result.status, Date.now() - t0, body);
+    return result;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  LOG
+// ═══════════════════════════════════════════════════════════════════
+function addLog(method, path, status, ms, body) {
     const log = document.getElementById('log');
     log.querySelector('.log-empty')?.remove();
-
-    const time  = new Date().toLocaleTimeString('pt-BR');
-    const sc    = status >= 400 ? 'ler' : 'lok';
+    const time = new Date().toLocaleTimeString('pt-BR');
+    const sc   = status >= 400 ? 'ler' : 'lok';
     const entry = document.createElement('div');
-    entry.className = 'log-entry';
+    entry.className = 'log-entry fade-in';
     entry.innerHTML =
-        `<span class="lt">[${time}]</span> ` +
-        `<span class="lm lm-${method}">${method.padEnd(7,' ')}</span>` +
-        `<span class="lu"> ${path.padEnd(35,' ')} </span>` +
-        `<span class="${sc}">${status}</span>` +
-        `<span class="lt"> ${ms}ms</span>`;
+        `<div class="log-main"><span class="lt">[${time}]</span> <span class="lm lm-${method}">${method.padEnd(7)}</span> <span class="lu">${esc(path)}</span> <span class="${sc}">${status}</span><span class="lt"> ${ms}ms</span></div>` +
+        (body ? `<div class="log-body">body: ${esc(JSON.stringify(body))}</div>` : '');
     log.appendChild(entry);
     log.scrollTop = log.scrollHeight;
 }
 
-async function api(method, path, body) {
-    const t0  = Date.now();
-    const res = await fetch(path, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
-    });
-    const ms   = Date.now() - t0;
-    let   data;
-    try { data = await res.json(); } catch { data = {}; }
-    addLog(method, path, res.status, ms);
-    return { status: res.status, data };
-}
-
 function limparLog() {
-    document.getElementById('log').innerHTML =
-        '<div class="log-empty">Log limpo. Aguardando novas requisições…</div>';
+    document.getElementById('log').innerHTML = '<div class="log-empty">Log limpo. Aguardando novas requisições…</div>';
 }
 
-// ── Database view ────────────────────────────────────────
-
-function fmtDate(d) {
-    if (!d) return '—';
-    const [y, m, day] = d.split('-');
-    return `${day}/${m}/${y}`;
-}
-
+// ═══════════════════════════════════════════════════════════════════
+//  BANCO DE DADOS — RENDER
+// ═══════════════════════════════════════════════════════════════════
+function fmtDate(d) { if (!d) return '—'; const [y,m,day] = d.split('-'); return `${day}/${m}/${y}`; }
 function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
 
 function renderDB(lista) {
     const tbody = document.getElementById('db-tbody');
-    if (!Array.isArray(lista) || lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">
-            <div class="ico">📭</div>
-            <p>Nenhum registro cadastrado. Use o formulário <strong>POST</strong> acima para começar!</p>
-        </div></td></tr>`;
+    if (!Array.isArray(lista) || !lista.length) {
+        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="ico">📭</div><p>Nenhum registro. Use o formulário <strong>POST</strong> acima para criar o primeiro!</p></div></td></tr>`;
         return;
     }
-    tbody.innerHTML = lista.map(p => `
-        <tr class="flash-row">
-            <td>${p.nome_completo}</td>
-            <td><code>${p.cpf}</code></td>
-            <td>${fmtDate(p.data_nascimento)}</td>
-            <td>${p.endereco}</td>
-            <td>${cap(p.estado_civil)}</td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = lista.map(p => `<tr class="flash-row"><td>${esc(p.nome_completo)}</td><td><code>${esc(p.cpf)}</code></td><td>${fmtDate(p.data_nascimento)}</td><td>${esc(p.endereco)}</td><td>${cap(p.estado_civil)}</td></tr>`).join('');
 }
 
-async function listarPessoas() {
-    const { status, data } = await api('GET', '/pessoas/');
-    showResponse('r-list', status, data);
-    if (status === 200) renderDB(data);
+// ═══════════════════════════════════════════════════════════════════
+//  PREVIEWS AO VIVO
+// ═══════════════════════════════════════════════════════════════════
+function previewPost() {
+    document.getElementById('req-preview-post').innerHTML = buildReqHtml('POST', '/pessoas/', {
+        nome_completo:   document.getElementById('p-nome').value  || '…',
+        cpf:             document.getElementById('p-cpf').value   || '…',
+        data_nascimento: document.getElementById('p-data').value  || '…',
+        endereco:        document.getElementById('p-end').value   || '…',
+        estado_civil:    document.getElementById('p-estado').value || '…',
+    });
+}
+function previewGet() {
+    const cpf = document.getElementById('g-cpf').value.trim();
+    document.getElementById('req-preview-get').innerHTML = cpf
+        ? buildReqHtml('GET', `/pessoas/${encodeURIComponent(cpf)}`)
+        : '<span class="c-placeholder">← Digite um CPF para ver a requisição...</span>';
+}
+function previewPut() {
+    const cpfUrl = document.getElementById('u-cpf-url').value.trim() || '{cpf}';
+    document.getElementById('req-preview-put').innerHTML = buildReqHtml('PUT', `/pessoas/${encodeURIComponent(cpfUrl)}`, {
+        nome_completo:   document.getElementById('u-nome').value     || '…',
+        cpf:             document.getElementById('u-cpf-body').value || '…',
+        data_nascimento: document.getElementById('u-data').value     || '…',
+        endereco:        document.getElementById('u-end').value      || '…',
+        estado_civil:    document.getElementById('u-estado').value   || '…',
+    });
+}
+function previewDelete() {
+    const cpf = document.getElementById('d-cpf').value.trim();
+    document.getElementById('req-preview-del').innerHTML = cpf
+        ? buildReqHtml('DELETE', `/pessoas/${encodeURIComponent(cpf)}`)
+        : '<span class="c-placeholder">← Digite um CPF para ver a requisição...</span>';
 }
 
-// ── CRUD handlers ────────────────────────────────────────
-
+// ═══════════════════════════════════════════════════════════════════
+//  HANDLERS CRUD
+// ═══════════════════════════════════════════════════════════════════
 async function criarPessoa() {
-    const body = {
-        nome_completo:   document.getElementById('p-nome').value,
-        cpf:             document.getElementById('p-cpf').value,
-        data_nascimento: document.getElementById('p-data').value,
-        endereco:        document.getElementById('p-end').value,
-        estado_civil:    document.getElementById('p-estado').value,
-    };
+    const body = { nome_completo: document.getElementById('p-nome').value, cpf: document.getElementById('p-cpf').value, data_nascimento: document.getElementById('p-data').value, endereco: document.getElementById('p-end').value, estado_civil: document.getElementById('p-estado').value };
+    document.getElementById('req-preview-post').innerHTML = buildReqHtml('POST', '/pessoas/', body);
     const { status, data } = await api('POST', '/pessoas/', body);
-    showResponse('r-post', status, data);
+    showResponse('res-post-panel', 'res-post-header', 'res-post-body', status, data);
     if (status === 201) listarPessoas();
 }
-
 async function buscarPessoa() {
-    const cpf = document.getElementById('g-cpf').value.trim();
-    if (!cpf) return;
-    const { status, data } = await api('GET', `/pessoas/${encodeURIComponent(cpf)}`);
-    showResponse('r-get', status, data);
+    const cpf = document.getElementById('g-cpf').value.trim(); if (!cpf) return;
+    const path = `/pessoas/${encodeURIComponent(cpf)}`;
+    document.getElementById('req-preview-get').innerHTML = buildReqHtml('GET', path);
+    const { status, data } = await api('GET', path);
+    showResponse('res-get-panel', 'res-get-header', 'res-get-body', status, data);
 }
-
+async function listarTodasAPI() {
+    document.getElementById('req-preview-get').innerHTML = buildReqHtml('GET', '/pessoas/');
+    const { status, data } = await api('GET', '/pessoas/');
+    showResponse('res-get-panel', 'res-get-header', 'res-get-body', status, data);
+    if (status === 200) renderDB(data);
+}
+async function listarPessoas() {
+    const { status, data } = await api('GET', '/pessoas/');
+    if (status === 200) renderDB(data);
+}
 async function atualizarPessoa() {
-    const cpfUrl = document.getElementById('u-cpf-url').value.trim();
-    if (!cpfUrl) return;
-    const body = {
-        nome_completo:   document.getElementById('u-nome').value,
-        cpf:             document.getElementById('u-cpf-body').value,
-        data_nascimento: document.getElementById('u-data').value,
-        endereco:        document.getElementById('u-end').value,
-        estado_civil:    document.getElementById('u-estado').value,
-    };
-    const { status, data } = await api('PUT', `/pessoas/${encodeURIComponent(cpfUrl)}`, body);
-    showResponse('r-put', status, data);
+    const cpfUrl = document.getElementById('u-cpf-url').value.trim(); if (!cpfUrl) return;
+    const body = { nome_completo: document.getElementById('u-nome').value, cpf: document.getElementById('u-cpf-body').value, data_nascimento: document.getElementById('u-data').value, endereco: document.getElementById('u-end').value, estado_civil: document.getElementById('u-estado').value };
+    const path = `/pessoas/${encodeURIComponent(cpfUrl)}`;
+    document.getElementById('req-preview-put').innerHTML = buildReqHtml('PUT', path, body);
+    const { status, data } = await api('PUT', path, body);
+    showResponse('res-put-panel', 'res-put-header', 'res-put-body', status, data);
     if (status === 200) listarPessoas();
 }
-
 async function excluirPessoa() {
-    const cpf = document.getElementById('d-cpf').value.trim();
-    if (!cpf) return;
-    const { status, data } = await api('DELETE', `/pessoas/${encodeURIComponent(cpf)}`);
-    showResponse('r-delete', status, data);
+    const cpf = document.getElementById('d-cpf').value.trim(); if (!cpf) return;
+    const path = `/pessoas/${encodeURIComponent(cpf)}`;
+    document.getElementById('req-preview-del').innerHTML = buildReqHtml('DELETE', path);
+    const { status, data } = await api('DELETE', path);
+    showResponse('res-del-panel', 'res-del-header', 'res-del-body', status, data);
     if (status === 200) listarPessoas();
 }
 
-// Carregar dados ao abrir
+// Init
 listarPessoas();
 </script>
 </body>

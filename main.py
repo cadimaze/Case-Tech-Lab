@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import os
 import re
@@ -10,6 +11,13 @@ app = FastAPI(
     title="Sistema de Gestão de Pessoas",
     description="API REST para cadastro e gestão de informações de pessoas.",
     version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 _BASE_DIR = os.path.dirname(os.path.abspath(__file__))
